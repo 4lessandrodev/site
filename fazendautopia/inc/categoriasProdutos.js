@@ -5,7 +5,7 @@ module.exports = {
   getCategorias() {
     return new Promise((resolve, reject) => {
       conn.query(`
-      SELECT * FROM tb_categoria_produtos AS categoriasProd;
+      SELECT * FROM tb_categoria_produtos AS categoriasProd WHERE enabled = 1;
       `, (err, results) => {
         if (err) {
           reject(err);
@@ -26,7 +26,7 @@ module.exports = {
     //console.log('CLASSE: ' + categoria.description);
 
     let query, params = [fields.description,
-    fields.status];
+    fields.status, 1];
 
     let code = parseInt(fields.id);
     //Editar categoria
@@ -35,14 +35,15 @@ module.exports = {
       query = `
       UPDATE tb_categoria_produtos
       SET description = ?,
-      status = ?
+      status = ?,
+      enabled = ?
       WHERE id = ?
       `;
       //Salvar nova categoria
     } else {
 
-      query = `INSERT INTO tb_categoria_produtos (description, status)
-VALUES(?, ?)`;
+      query = `INSERT INTO tb_categoria_produtos (description, status, enabled)
+VALUES(?, ?, ?)`;
     }
 
     return new Promise((resolve, reject) => {
@@ -64,6 +65,24 @@ VALUES(?, ?)`;
       DELETE FROM tb_categoria_produtos WHERE id = ?
       `, [
         id
+      ], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+
+
+  //Desativar a categoria
+  disabled(id) {
+    return new Promise((resolve, reject) => {
+      conn.query(`
+      UPDATE tb_categoria_produtos SET enabled = ? WHERE id = ?
+      `, [
+        0, id
       ], (err, results) => {
         if (err) {
           reject(err);

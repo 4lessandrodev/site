@@ -81,6 +81,14 @@ router.delete('/categoria-produtos/:id', function (req, res, next) {
     res.send(err);
   });
 });
+
+router.post('/categoria-produtos/:id', function (req, res, next) {
+  categoriaProdutos.disabled(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
 //------------------FIM DE CATEGORIAS DE PRODUTOS -------
 
 //-------------------------CATEGORIAS DE CESTAS ---------
@@ -110,6 +118,14 @@ router.delete('/categoria-cestas/:id', function (req, res, next) {
     res.send(err);
   });
 });
+
+router.post('/categoria-cestas/:id', function (req, res, next) {
+  categoriaCestas.disabled(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
 //------------------FIM DE CATEGORIAS DE CESTAS  --------
 
 //------------------UNIDADES DE MEDIDAS -----------------
@@ -134,6 +150,14 @@ router.post('/unidades-medida', function (req, res, next) {
 
 router.delete('/unidades-medida/:id', function (req, res, next) {
   unidadesMedidas.delete(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.post('/unidades-medida/:id', function (req, res, next) {
+  unidadesMedidas.disabled(req.params.id).then(results => {
     res.send(results);
   }).catch(err => {
     res.send(err);

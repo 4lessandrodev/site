@@ -128,7 +128,7 @@
       let data = JSON.parse(tr.dataset.row);
 
       fetch(`/admin/categoria-produtos/${data.id}`, {
-          method: 'DELETE'
+          method: 'POST'
         }).then(response => response.json())
         .then(json => {
           window.location.reload();
