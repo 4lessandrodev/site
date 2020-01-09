@@ -4,6 +4,8 @@ var users = require('./../inc/users');
 var categoriaProdutos = require('./../inc/categoriasProdutos');
 var categoriaCestas = require('./../inc/categoriasCestas');
 var unidadesMedidas = require('./../inc/unidadesMedidas');
+var regiao = require('./../inc/regioes');
+var fornecedores = require('./../inc/fornecedores');
 var router = express.Router();
 
 //------------LOGIN----------------------------
@@ -165,7 +167,80 @@ router.post('/unidades-medida/:id', function (req, res, next) {
 });
 //------------------UNIDADES DE MEDIDAS -----------------
 
+//------------------UNIDADES DE REGIOES -----------------
+router.get('/regioes', function (req, res, next) {
+  regiao.getRegioes().then(regioes => {
+    res.render('admin/regioes', admin.getParams(req, {
+      navbar: true,
+      regioes,
+      pagina: 'Regiões',
+      btnLabel: 'Nova Região'
+    }));
+  });
+});
 
+router.post('/regioes', function (req, res, next) {
+  regiao.save(req.fields).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.delete('/regioes/:id', function (req, res, next) {
+  regiao.delete(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.post('/regioes/:id', function (req, res, next) {
+  regiao.disabled(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+//------------------UNIDADES DE REGIOES -----------------
+
+
+//------------------FORNECEDORES -----------------
+router.get('/fornecedores', function (req, res, next) {
+  fornecedores.getFornecedores().then(fornecedores => {
+    res.render('admin/fornecedores', admin.getParams(req, {
+      navbar: true,
+      fornecedores,
+      pagina: 'Fornecedores',
+      btnLabel: 'Novo Fornecedor'
+    }));
+  });
+});
+
+router.post('/fornecedores', function (req, res, next) {
+  fornecedores.save(req.fields).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.delete('/fornecedores/:id', function (req, res, next) {
+  fornecedores.delete(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.post('/fornecedores/:id', function (req, res, next) {
+  fornecedores.disabled(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+//------------------FORNECEDORES -----------------
 
 
 router.get('/emails', function (req, res, next) {
