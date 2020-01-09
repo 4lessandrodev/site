@@ -6,6 +6,8 @@ var categoriaCestas = require('./../inc/categoriasCestas');
 var unidadesMedidas = require('./../inc/unidadesMedidas');
 var regiao = require('./../inc/regioes');
 var fornecedores = require('./../inc/fornecedores');
+var lojas = require('./../inc/lojas');
+var frete = require('../inc/fretes.js');
 var router = express.Router();
 
 //------------LOGIN----------------------------
@@ -241,6 +243,82 @@ router.post('/fornecedores/:id', function (req, res, next) {
   });
 });
 //------------------FORNECEDORES -----------------
+
+//------------------LOJAS -----------------
+router.get('/lojas', function (req, res, next) {
+  lojas.getLojas().then(lojas => {
+    res.render('admin/lojas', admin.getParams(req, {
+      navbar: true,
+      lojas,
+      pagina: 'Lojas',
+      btnLabel: 'Nova Loja'
+    }));
+  });
+});
+
+router.post('/lojas', function (req, res, next) {
+  lojas.save(req.fields).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.delete('/lojas/:id', function (req, res, next) {
+  lojas.delete(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.post('/lojas/:id', function (req, res, next) {
+  lojas.disabled(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+//------------------LOJAS -----------------
+
+
+
+//------------------FRETES -----------------
+router.get('/tabela-frete', function (req, res, next) {
+  frete.getFretes().then(fretes => {
+    res.render('admin/tabela-frete', admin.getParams(req, {
+      navbar: true,
+      fretes,
+      pagina: 'Frete',
+      btnLabel: 'Novo Frete'
+    }));
+  });
+});
+
+router.post('/tabela-frete', function (req, res, next) {
+  frete.save(req.fields).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.delete('/tabela-frete/:id', function (req, res, next) {
+  frete.delete(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.post('/tabela-frete/:id', function (req, res, next) {
+  frete.disabled(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+//------------------FRETES -----------------
 
 
 router.get('/emails', function (req, res, next) {

@@ -128,7 +128,7 @@ app.use(function (req, res, next) {
 
 //-------------------METODO POST PARA LOJAS----------------------------------------
 app.use(function (req, res, next) {
-  if (req.url == '/admin/unidades-medida' && req.method.toLowerCase() === 'post') {
+  if (req.url == '/admin/lojas' && req.method.toLowerCase() === 'post') {
     var form = formidable.IncomingForm({
 
     });
@@ -143,6 +143,25 @@ app.use(function (req, res, next) {
   }
 });
 //-------------------METODO POST PARA LOJAS----------------------------------------
+
+
+//-------------------METODO POST PARA FRETES----------------------------------------
+app.use(function (req, res, next) {
+  if (req.url == '/admin/tabela-frete' && req.method.toLowerCase() === 'post') {
+    var form = formidable.IncomingForm({
+
+    });
+    form.parse(req, function (err, fields, files) {
+      req.body = fields;
+      req.fields = fields;
+      req.files = files;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+//-------------------METODO POST PARA FRETES----------------------------------------
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
