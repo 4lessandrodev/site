@@ -8,6 +8,7 @@ var regiao = require('./../inc/regioes');
 var fornecedores = require('./../inc/fornecedores');
 var lojas = require('./../inc/lojas');
 var frete = require('../inc/fretes.js');
+var produtos = require('../inc/produtos.js');
 var router = express.Router();
 
 //------------LOGIN----------------------------
@@ -286,12 +287,18 @@ router.post('/lojas/:id', function (req, res, next) {
 //------------------FRETES -----------------
 router.get('/tabela-frete', function (req, res, next) {
   frete.getFretes().then(fretes => {
-    res.render('admin/tabela-frete', admin.getParams(req, {
-      navbar: true,
-      fretes,
-      pagina: 'Frete',
-      btnLabel: 'Novo Frete'
-    }));
+    regiao.getRegioes().then(regioes => {
+      lojas.getLojas().then(lojas => {
+        res.render('admin/tabela-frete', admin.getParams(req, {
+          navbar: true,
+          fretes,
+          regioes,
+          lojas,
+          pagina: 'Frete',
+          btnLabel: 'Novo Frete'
+        }));
+      });
+    });
   });
 });
 
@@ -319,6 +326,51 @@ router.post('/tabela-frete/:id', function (req, res, next) {
   });
 });
 //------------------FRETES -----------------
+
+
+
+//------------------PRODUTOS -----------------
+router.get('/produtos', function (req, res, next) {
+  produtos.getProdutos().then(produtos => {
+    categoriaProdutos.getCategorias().then(categoriasProd => {
+      unidadesMedidas.getUnidades().then(unidMedida => {
+        res.render('admin/produtos', admin.getParams(req, {
+          navbar: true,
+          produtos,
+          categoriasProd,
+          unidMedida,
+          pagina: 'Produtos',
+          btnLabel: 'Novo Produto'
+        }));
+      });
+    });
+  });
+});
+
+router.post('/produtos', function (req, res, next) {
+  produtos.save(req.fields).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.delete('/produtos/:id', function (req, res, next) {
+  produtos.delete(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.post('/produtos/:id', function (req, res, next) {
+  produtos.disabled(req.params.id).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+//------------------PRODUTOS -----------------
 
 
 router.get('/emails', function (req, res, next) {
