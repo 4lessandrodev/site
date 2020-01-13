@@ -189,60 +189,25 @@
 					</div>
 					<div class="row">
 
-						<div class="col-lg-4 col-md-4 col-sm-6">
-							<a href="images/images/quem_somos desktop-4-200x200px.jpg" class="fh5co-card-item image-popup">
+						<% cestas.forEach(function(cesta){ %>
+						<div class="col-lg-4 col-md-4 col-sm-6" data-row="<%= JSON.stringify(cesta)%>">
+							<a href="<%=cesta.imageCesta%>" class="fh5co-card-item image-popup">
 								<figure>
 									<div class="overlay">
 										<i class="far fa-laugh-beam"></i>
 									</div>
-									<img src="images/images/quem_somos desktop-5-200x200px.jpg" alt="Image" class="img-responsive">
+									<img src="<%=cesta.imageCesta%>" alt="Image" class="img-responsive" style="margin: auto;">
 								</figure>
 								<div class="fh5co-text">
-									<h2>Bife de Costela com molho</h2>
-									<p>Vide electram sadipscing et per. Aenean aliquam molestie leo, vitae iaculis nisl.</p>
+									<h2><%=cesta.descriptionCesta%></h2>
+									<p><%=cesta.nutrInfoCesta%></p>
 									<p>
-										<span class="price cursive-font">R$35,69</span>
+										<span class="price cursive-font">R$ <%=cesta.salesPriceCesta%></span>
 									</p>
 								</div>
 							</a>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-6">
-							<a href="images/images/quem_somos desktop-6-200x200px.jpg" class="fh5co-card-item image-popup">
-								<figure>
-									<div class="overlay">
-										<i class="far fa-laugh-beam"></i>
-									</div>
-									<img src="images/images/quem_somos desktop-7-200x200px.jpg" alt="Image" class="img-responsive">
-								</figure>
-								<div class="fh5co-text">
-									<h2>Hambúrguer com Fritas</h2>
-									<p>Vide electram sadipscing et per. Aenean aliquam molestie leo, vitae iaculis nisl.</p>
-									<p>
-										<span class="price cursive-font">R$22,80</span>
-									</p>
-
-								</div>
-							</a>
-						</div>
-
-						<div class="col-lg-4 col-md-4 col-sm-6">
-							<a href="images/images/quem_somos_desktop-8-200x200px.jpg" class="fh5co-card-item image-popup">
-								<figure>
-									<div class="overlay">
-										<i class="far fa-laugh-beam"></i>
-									</div>
-									<img src="images/images/quem_somos_desktop-8-200x200px.jpg" alt="Image" class="img-responsive">
-								</figure>
-								<div class="fh5co-text">
-									<h2>Chilli com Carne</h2>
-									<p>Vide electram sadipscing et per. Aenean aliquam molestie leo, vitae iaculis nisl.</p>
-									<p>
-										<span class="price cursive-font">R$29,40</span>
-									</p>
-								</div>
-							</a>
-						</div>
-
+						<% }); %>
 					</div>
 				</div>
 			</div>
