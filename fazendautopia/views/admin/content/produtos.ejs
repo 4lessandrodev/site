@@ -9,11 +9,13 @@
 
 
         <form method="POST" action="/admin/produtos">
-          <input type="hidden" id="id" name="id">
+          <input type="hidden" id="idProd" name="idProd">
+          <input type="hidden" id="array" name="array">
+          <input type="hidden" id="fornecedor_key" name="fornecedor_key">
           <div class="form-row">
-            <div class="form-group col-md-2">
+            <div onclick="Utils.uploadImg()" class="form-group col-md-2" id="div-imagem">
               <label for="image" class="caixaImg">
-                <input type="file" hidden name="image" id="image">
+                <input type="file" hidden name="imageProd" id="imageProd" accept="image/png">
                 <img src="./../images/images/SemImagem-300x300px.png" alt="Imagem" class="imagem rounded-circle"
                   id="imagem-produto">
                 <div class="sobreposicao">
@@ -25,53 +27,53 @@
 
 
             <div class="form-group col-md-4">
-              <label for="description"><strong>Descrição</strong></label>
-              <input type="text" class="form-control" id="description" name="description">
+              <label for="nameProd"><strong>Descrição</strong></label>
+              <input type="text" class="form-control" id="nameProd" name="nameProd" required>
             </div>
 
             <div class="form-group col-md-4">
-              <label for="category"><strong>Categoria</strong></label>
-              <select class="form-control" id="category" name="category">
+              <label for="categoryProd"><strong>Categoria</strong></label>
+              <select class="form-control" id="categoryProd" name="categoryProd">
                 <option selected>Selecione...</option>
-                <option>Frutas</option>
-                <option>Verduras</option>
+                <% categoriasProd.forEach(function(categ){ %>
+                <option value="<%= categ.id%>"><%=categ.description%></option>
+                <% }); %>
               </select>
             </div>
 
             <div class="form-group col-md-2">
-              <label for="salePrice"><strong>Preço</strong></label>
-              <input type="number" class="form-control" id="salePrice" name="salePrice">
+              <label for="salePriceProd"><strong>Preço</strong></label>
+              <input type="number" class="form-control" id="salePriceProd" name="salePriceProd" required>
             </div>
 
             <div class="form-group col-md-3">
-              <label for="unitMeansure"><strong>Und. Medida</strong></label>
-              <select id="unitMeansure" class="form-control" name="unitMeansure">
+              <label for="unitMeansureProd"><strong>Und. Medida</strong></label>
+              <select id="unitMeansureProd" class="form-control" name="unitMeansureProd">
                 <option selected>Selecione...</option>
-                <option>Kg</option>
-                <option>Pacote</option>
-                <option>Litro</option>
-                <option>Libra</option>
+                <% unidMedida.forEach(function(und){ %>
+                <option value="<%= und.id%>"><%=und.description%></option>
+                <% }); %>
               </select>
             </div>
 
 
             <div class="form-group col-md-3">
-              <label for="productType"><strong>Tipo de Produto</strong></label>
-              <select id="productType" class="form-control" name="productType">
+              <label for="productTypeProd"><strong>Tipo de Produto</strong></label>
+              <select id="productTypeProd" class="form-control" name="productTypeProd">
                 <option selected>Selecione...</option>
-                <option>Produtos Especiais</option>
-                <option>Produto Normal</option>
+                <option value="1">Produtos Especiais</option v>
+                <option value="0">Produto Normal</option>
               </select>
             </div>
 
             <div class="form-group col-md-3">
-              <label for="multiplyFactor"><strong>Fator Multiplicador</strong></label>
-              <input type="number" class="form-control" id="multiplyFactor" name="multiplyFactor">
+              <label for="multiplyFactorProd"><strong>Fator Multiplicador</strong></label>
+              <input type="number" class="form-control" id="multiplyFactorProd" name="multiplyFactorProd">
             </div>
 
             <div class="form-group col-md-3">
-              <label for="status"><strong>Status</strong></label>
-              <select id="status" class="form-control" name="status">
+              <label for="statusProd"><strong>Status</strong></label>
+              <select id="statusProd" class="form-control" name="statusProd">
                 <option selected>Selecione...</option>
                 <option value="1">Ativo</option>
                 <option value="0">Bloqueado</option>
@@ -79,21 +81,19 @@
             </div>
 
             <div class="form-group col-md-6">
-              <label for="productSuppliers"><strong>Fornecedor</strong></label>
-              <select class="mdb-select md-form form-control" id="productSuppliers" multiple size="5"
-                name="productSuppliers">
-                <option value="1">Joao Fazenda Horte</option>
-                <option value="2">Tião Jose Hortal</option>
-                <option value="3">Joaquina Horte e Lim</option>
-                <option value="4">Joaquim da Silva</option>
-                <option value="5">Jalozim da Horta</option>
+              <label for="productSuppliersProd"><strong>Fornecedor</strong></label>
+              <select class="mdb-select md-form form-control" id="productSuppliersProd" multiple size="5"
+                name="productSuppliersProd" data-item="<%= JSON.stringify(chaves)%>">
+                <% fornec.forEach(function(fornec){ %>
+                <option value="<%= fornec.id%>"><%=fornec.socialName%></option>
+                <% }); %>
               </select>
             </div>
 
             <div class="form-group col-md-6">
-              <label for="nutrictionInformation"><strong>Informações Nutricionais</strong></label>
-              <textarea class="form-control" id="nutrictionInformation" rows="5"
-                name="nutrictionInformation"></textarea>
+              <label for="nutrictionInformationProd"><strong>Informações Nutricionais</strong></label>
+              <textarea class="form-control" id="nutrictionInformationProd" rows="5"
+                name="nutrictionInformationProd"></textarea>
             </div>
 
           </div>
@@ -106,10 +106,13 @@
       </section>
 
 
-
+      <script src="./../javascripts/js/script-filereader.js"></script>
       <script src="./../javascripts/js/script-formsave.js"></script>
       <script>
+        new Scriptfilereader('#div-imagem [type=file]', '#div-imagem img');
+
         let form = document.querySelector('main form');
+
 
         form.save().then(json => {
 
@@ -143,13 +146,13 @@
             </tr>
           </thead>
           <tbody>
-            <% produtos.forEach(function(row){ %>
-            <tr data-row="<%= JSON.stringify(row)%>">
-              <th scope="row"><%=row.id%></th>
-              <td><%=row.description%></td>
-              <td><%=row.salePrice%></td>
-              <td>Especiais</td>
-              <td>Ativo</td>
+            <% produtos.forEach(function(produto){ %>
+            <tr data-row="<%= JSON.stringify(produto)%>">
+              <th scope="row"><img src="/<%=produto.imageProd%>" style="width: 2em; height: 2em;"></th>
+              <td><%=produto.nameProd %></td>
+              <td><%=produto.salePriceProd %></td>
+              <td><% if(produto.productTypeProd){ %>Especial<% }else{ %>Normal<% }; %></td>
+              <td><% if(produto.statusProd){ %>Ativo<% }else{ %>Bloqueado<% }; %></td>
               <td>
                 <button class="btn btn-excluir"><i class="fas fa-trash-alt"></i></button>
               </td>
@@ -158,7 +161,7 @@
                     class="fa fa-pencil-alt"></i></button>
               </td>
             </tr>
-
+            <% }); %>
           </tbody>
         </table>
       </section>
@@ -167,6 +170,10 @@
     <script>
       let buttonsEdit = document.querySelectorAll('.btn-editar');
       let buttonsDelete = document.querySelectorAll('.btn-excluir');
+
+
+      let chaveFornecedoresSelecionados =
+        JSON.parse(document.querySelector('select[name=productSuppliersProd]').getAttribute('data-item'));
 
       let mainForm = document.querySelector('main form');
       for (let btn of buttonsEdit) {
@@ -177,16 +184,48 @@
 
           let data = JSON.parse(tr.dataset.row);
 
-          for (let name in data) {
-            switch (name) {
-              case 'image':
-                mainForm.querySelector('img').src = '/' + data[name];
+
+
+          for (let inputName in data) {
+            switch (inputName) {
+              case 'imageProd':
+                mainForm.querySelector('img').src = '/' + data[inputName];
+                mainForm.querySelector('input[type=file]').file = data[inputName];
                 break;
               default:
-                let input = mainForm.querySelector(`[name=${name}`);
-                if (input) input.value = data[name];
+                let input = mainForm.querySelector(`[name=${inputName}`);
+                if (input) input.value = data[inputName];
             }
           }
+
+          let selectionValues = chaveFornecedoresSelecionados.filter(item => {
+            return item.fornecedor_key == data.productSuppliersProd;
+          });
+
+
+
+          let cods = [];
+          for (let cod of selectionValues) {
+            cods.push(cod.fornecedor);
+            inputHidden.value = JSON.stringify(cods);
+          }
+          if (!isNaN(selectionValues[0].fornecedor_key)) {
+            fornecedor_key.value = parseInt(selectionValues[0].fornecedor_key);
+            console.log(document.getElementById('fornecedor_key').value);
+          }
+
+          let check = false;
+          for (let option of collection) {
+            check = cods.some((item) => {
+              return (option.value == item);
+            });
+            if (check) {
+              option.selected = true;
+            }
+          };
+
+          console.log(cods);
+
         });
       }
 
@@ -206,4 +245,17 @@
             })
         });
       }
+
+      let inputHidden = document.getElementById('array');
+      let fornecedor_key = document.getElementById('fornecedor_key');
+      let collection = document.getElementById('productSuppliersProd');
+      collection.addEventListener('click', e => {
+
+        let arr = [];
+
+        for (let item of collection.selectedOptions) {
+          arr.push(item.value);
+          inputHidden.value = JSON.stringify(arr);
+        }
+      });
     </script>

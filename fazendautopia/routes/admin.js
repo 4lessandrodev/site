@@ -9,6 +9,7 @@ var fornecedores = require('./../inc/fornecedores');
 var lojas = require('./../inc/lojas');
 var frete = require('../inc/fretes.js');
 var produtos = require('../inc/produtos.js');
+var cestas = require('../inc/cestas.js');
 var router = express.Router();
 
 //------------LOGIN----------------------------
@@ -334,29 +335,79 @@ router.get('/produtos', function (req, res, next) {
   produtos.getProdutos().then(produtos => {
     categoriaProdutos.getCategorias().then(categoriasProd => {
       unidadesMedidas.getUnidades().then(unidMedida => {
-        res.render('admin/produtos', admin.getParams(req, {
-          navbar: true,
-          produtos,
-          categoriasProd,
-          unidMedida,
-          pagina: 'Produtos',
-          btnLabel: 'Novo Produto'
-        }));
+        fornecedores.getFornecedores().then(fornec => {
+          fornecedores.getAllFornecedorSelection().then(chaves => {
+            res.render('admin/produtos', admin.getParams(req, {
+              navbar: true,
+              produtos,
+              categoriasProd,
+              unidMedida,
+              fornec,
+              chaves,
+              pagina: 'Produtos',
+              btnLabel: 'Novo Produto'
+            }));
+          });
+        });
       });
     });
   });
 });
 
+//Salvar ou editar um produto 
 router.post('/produtos', function (req, res, next) {
-  produtos.save(req.fields).then(results => {
-    res.send(results);
-  }).catch(err => {
-    res.send(err);
-  });
+
+  //Verificar se é uma edição 
+  if (!isNaN(parseInt(req.fields.idProd))) {
+    let fornecedor_key = parseInt(req.fields.fornecedor_key);
+    fornecedores.deleteFornecedorKey(fornecedor_key).then(results => {
+      let codFornecedores = JSON.parse(req.fields.array);
+      for (let fornecedor of codFornecedores) {
+        fornecedor = parseInt(fornecedor);
+        if (!isNaN(fornecedor)) {
+          fornecedores.saveFornecedoresParaKey(fornecedor, fornecedor_key).then(results => {
+          }).catch(err => {
+            return err;
+          });
+        }
+      }
+      produtos.save(req.fields, fornecedor_key, req.files).then(results => {
+        res.send(results);
+      }).catch(err => {
+        res.send(err);
+      });
+    }).catch(err => {
+      res.send(err);
+    });
+
+  } else {
+    //Salvar um novo produto
+    fornecedores.saveFornecedoresKey().then(fornecedorKey => {
+      fornecedores.getLastFornecedorKey().then(idFornecedorKey => {
+        let codFornecedores = JSON.parse(req.fields.array);
+        for (let fornecedor of codFornecedores) {
+          fornecedor = parseInt(fornecedor);
+          if (!isNaN(fornecedor)) {
+            fornecedores.saveFornecedoresParaKey(fornecedor, idFornecedorKey[0].id).then(results => {
+            }).catch(err => {
+              return err;
+            });
+          }
+        }
+        produtos.save(req.fields, idFornecedorKey[0].id, req.files).then(results => {
+          res.send(results);
+        }).catch(err => {
+          res.send(err);
+        });
+      });
+    }).catch(err => {
+      res.send(err);
+    });
+  }
 });
 
 router.delete('/produtos/:id', function (req, res, next) {
-  produtos.delete(req.params.id).then(results => {
+  produtos.delete(req.params.idProd).then(results => {
     res.send(results);
   }).catch(err => {
     res.send(err);
@@ -364,13 +415,108 @@ router.delete('/produtos/:id', function (req, res, next) {
 });
 
 router.post('/produtos/:id', function (req, res, next) {
-  produtos.disabled(req.params.id).then(results => {
+  produtos.disabled(req.params.idProd).then(results => {
     res.send(results);
   }).catch(err => {
     res.send(err);
   });
 });
 //------------------PRODUTOS -----------------
+
+
+
+
+//------------------CESTAS -----------------
+router.get('/cestas', function (req, res, next) {
+  cestas.getAllItensSelection().then(chaves => {
+    cestas.getCestas().then(cestas => {
+      produtos.getProdutos().then(productList => {
+        categoriaCestas.getCategorias().then(categoriasCestas => {
+          res.render('admin/cestas', admin.getParams(req, {
+            navbar: true,
+            cestas,
+            categoriasCestas,
+            productList,
+            chaves,
+            pagina: 'Cestas',
+            btnLabel: 'Nova Cesta'
+          }));
+        });
+      });
+    });
+  });
+});
+
+//Salvar ou editar uma cesta
+router.post('/cestas', function (req, res, next) {
+
+  //Verificar se é uma edição  e editar
+  if (!isNaN(parseInt(req.fields.idCesta))) {
+    let itens_key = parseInt(req.fields.item_key);
+    cestas.deleteItemKey(itens_key).then(results => {
+      let codItens = JSON.parse(req.fields.array);
+      for (let item of codItens) {
+        item = parseInt(item);
+        if (!isNaN(item)) {
+          cestas.saveItensParaKey(item, itens_key).then(results => {
+          }).catch(err => {
+            return err;
+          });
+        }
+      }
+      cestas.save(req.fields, itens_key, req.files).then(results => {
+        res.send(results);
+      }).catch(err => {
+        res.send(err);
+      });
+    }).catch(err => {
+      res.send(err);
+    });
+
+  } else {
+    //Salvar uma nova cesta
+    cestas.saveItensKey().then(fornecedorKey => {
+      cestas.getLastItemKey().then(idItemKey => {
+        let codItens = JSON.parse(req.fields.array);
+        for (let item of codItens) {
+          if (!isNaN(item)) {
+            item = parseInt(item);
+            cestas.saveItensParaKey(item, idItemKey[0].id).then(results => {
+            }).catch(err => {
+              return err;
+            });
+          }
+        }
+        cestas.save(req.fields, idItemKey[0].id, req.files).then(results => {
+          res.send(results);
+        }).catch(err => {
+          res.send(err);
+        });
+      });
+    }).catch(err => {
+      res.send(err);
+    });
+  }
+});
+
+router.delete('/cestas/:id', function (req, res, next) {
+  cestas.delete(req.params.idProd).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+router.post('/cestas/:id', function (req, res, next) {
+  cestas.disabled(req.params.idProd).then(results => {
+    res.send(results);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+//------------------CESTAS -----------------
+
+
 
 
 router.get('/emails', function (req, res, next) {

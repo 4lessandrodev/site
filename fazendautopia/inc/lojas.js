@@ -51,7 +51,6 @@ module.exports = {
     }
 
     return new Promise((resolve, reject) => {
-
       conn.query(query, params, (err, results) => {
         if (err) {
           reject(err);

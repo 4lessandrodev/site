@@ -1,4 +1,5 @@
 var conn = require('./db');
+let path = require('path');
 
 module.exports = {
 
@@ -6,8 +7,8 @@ module.exports = {
     return new Promise((resolve, reject) => {
       conn.query(`
       SELECT * FROM tb_produtos AS produto INNER JOIN tb_categoria_produtos As categoria 
-      ON produto.category = categoria.id INNER JOIN tb_undmedida AS unidMedida ON  produto.unitMeansure = unidMedida.id
-      WHERE produto.enabled = 1
+      ON produto.categoryProd = categoria.id INNER JOIN tb_undmedida AS unidMedida ON  produto.unitMeansureProd = unidMedida.id
+      WHERE produto.enabledProd = 1
       `, (err, results) => {
         if (err) {
           reject(err);
@@ -18,32 +19,56 @@ module.exports = {
     });
   },
 
-  save(fields) {
-    let query, params = [fields.description,
-    fields.category, fields.status, fields.changes, 1];
 
-    let code = parseInt(fields.id);
+  getProdutosAtivos() {
+    return new Promise((resolve, reject) => {
+      conn.query(`
+      SELECT * FROM tb_produtos AS produto INNER JOIN tb_categoria_produtos As categoria ON produto.categoryProd = categoria.id WHERE produto.enabledProd = 1 AND produto.statusProd = 1
+      `, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+
+
+
+  save(fields, productSuppliersProd, files) {
+
+    let imageProd = `images/uploads/${path.parse(files.imageProd.path).base}`;
+    let query, params = [fields.nameProd, fields.nutrictionInformationProd, fields.categoryProd, fields.statusProd, fields.productTypeProd, fields.multiplyFactorProd, fields.salePriceProd, productSuppliersProd, 1, fields.unitMeansureProd];
+    let queryPhoto = '';
+
+    if (files.imageProd.name) {
+      queryPhoto = ', imageProd = ?';
+      params.push(imageProd);
+    }
+
+
+    let code = parseInt(fields.idProd);
     //Editar produto
     if (code > 0) {
       params.push(code);
       query = `
-      UPDATE tb_produtos
-      SET description = ?,
-      category = ?,
-      status = ?,
-      changes = ?,
-      enabled = ?
-      WHERE id = ?
+      UPDATE tb_produtos SET nameProd = ?, nutrictionInformationProd = ?, categoryProd = ?, statusProd = ?, productTypeProd = ?, multiplyFactorProd = ?, salePriceProd = ?, productSuppliersProd = ?, enabledProd = ?, unitMeansureProd = ?${queryPhoto} WHERE tb_produtos.idProd = ?
       `;
+
       //Salvar novo produto
     } else {
 
-      query = `INSERT INTO tb_produtos (description, category, status, changes, enabled)
-VALUES(?, ?, ?, ?, ?)`;
+      if (!files.imageProd.name) {
+        reject('Envie a imagem do produto');
+      }
+
+      query = `INSERT INTO tb_produtos (nameProd, nutrictionInformationProd,
+      categoryProd, statusProd, productTypeProd, multiplyFactorProd, salePriceProd, productSuppliersProd, enabledProd, unitMeansureProd, imageProd)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     }
 
     return new Promise((resolve, reject) => {
-
       conn.query(query, params, (err, results) => {
         if (err) {
           reject(err);
@@ -58,7 +83,7 @@ VALUES(?, ?, ?, ?, ?)`;
   delete(id) {
     return new Promise((resolve, reject) => {
       conn.query(`
-      DELETE FROM tb_produtos WHERE id = ?
+      DELETE FROM tb_produtos WHERE idProd = ?
       `, [
         id
       ], (err, results) => {
@@ -75,7 +100,7 @@ VALUES(?, ?, ?, ?, ?)`;
   disabled(id) {
     return new Promise((resolve, reject) => {
       conn.query(`
-      UPDATE tb_produtos SET enabled = ? WHERE id = ?
+      UPDATE tb_produtos SET enabledProd = ? WHERE idProd = ?
       `, [
         0, id
       ], (err, results) => {

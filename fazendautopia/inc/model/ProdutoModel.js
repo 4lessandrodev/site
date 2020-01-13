@@ -1,8 +1,8 @@
 class ProdutoModel {
-  constructor (image, description, category, salePrice, unitMeansure, productSuppliers, status, nutrictionInformation, productType, multiplyFactor) {
+  constructor (image, name, category, salePrice, unitMeansure, productSuppliers, status, nutrictionInformation, productType, multiplyFactor) {
     this._id = null;
     this._image = image;
-    this._description = description;
+    this._name = name;
     this._category = category;
     this._salePrice = salePrice;
     this._registerDate = new Date();
@@ -20,8 +20,8 @@ class ProdutoModel {
   get image() {
     return this._image;
   }
-  get description() {
-    return this._description;
+  get name() {
+    return this._name;
   }
   get category() {
     return this._category;
@@ -58,8 +58,8 @@ class ProdutoModel {
   set image(value) {
     this._image = value;
   }
-  set description(value) {
-    this._description = value;
+  set name(value) {
+    this._name = value;
   }
   set category(value) {
     this._category = value;

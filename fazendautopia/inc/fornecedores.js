@@ -94,6 +94,103 @@ module.exports = {
         }
       });
     });
+  },
+
+  saveFornecedoresKey() {
+    return new Promise((resolve, reject) => {
+      conn.query(`
+INSERT INTO tb_fornecedores_key ()
+        VALUES();
+      `, [], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+
+  saveFornecedoresParaKey(fornecedor, id) {
+    return new Promise((resolve, reject) => {
+      conn.query(`
+        INSERT INTO tb_fornecedor_para_key (fornecedor, fornecedor_key)
+        VALUES(?, ?);
+      `, [
+        fornecedor,
+        id
+      ], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+
+
+  getLastFornecedorKey() {
+    return new Promise((resolve, reject) => {
+      conn.query(`
+      SELECT id
+      FROM tb_fornecedores_key
+      WHERE id = (SELECT MAX(id) FROM tb_fornecedores_key);
+      `, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+
+  getFornecedorSelection(chave) {
+    return new Promise((resolve, reject) => {
+      conn.query(`
+      SELECT * FROM tb_fornecedor_para_key AS chave WHERE chave.fornecedor_key = ?;
+      `, [
+        chave
+      ], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+
+  getAllFornecedorSelection() {
+    return new Promise((resolve, reject) => {
+      conn.query(`
+      SELECT * FROM tb_fornecedor_para_key;
+      `, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+
+  //Deletar fornecedor
+  deleteFornecedorKey(id) {
+    return new Promise((resolve, reject) => {
+      conn.query(`
+        DELETE FROM tb_fornecedor_para_key where fornecedor_key =?;
+        `, [
+        id
+      ], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
   }
 
 };
