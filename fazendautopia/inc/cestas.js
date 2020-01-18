@@ -63,7 +63,7 @@ module.exports = {
 
     if (files.imageCesta.name) {
       console.log('NOME DA IMAGEM: ' + files.imageCesta.name);
-      queryPhoto = ', imageProd = ?';
+      queryPhoto = ', imageCesta = ?';
       params.push(imageCesta);
     }
 
@@ -204,6 +204,22 @@ INSERT INTO tb_itens_key ()
     });
   },
 
+  getProdutosDeUmaCestaEspecifica(chaveItemDaCesta) {
+    return new Promise((resolve, reject) => {
+      conn.query(`
+      SELECT * FROM fazendautopia.tb_itens_para_key AS chave INNER JOIN fazendautopia.tb_produtos AS produtos WHERE chave.item_key = ? AND produtos.idProd = chave.produtoCesta AND produtos.enabledProd = 1 AND produtos.statusProd = 1
+      `, [
+        chaveItemDaCesta
+      ], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+
   //Selecionar todas as chaves vinculadas a um produto 
   getAllItensSelection() {
     return new Promise((resolve, reject) => {
@@ -226,6 +242,28 @@ INSERT INTO tb_itens_key ()
       conn.query(`
         DELETE FROM tb_itens_para_key where item_key =?;
         `, [
+        id
+      ], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+
+  //Obter uma cesta pelo ID
+
+  //SELECT * FROM fazendautopia.tb_cestas AS cesta INNER JOIN fazendautopia.tb_itens_para_key as chave 
+  //INNER JOIN fazendautopia.tb_produtos AS produtos WHERE cesta.idCesta = 1 AND produtos.enabledProd = 1 
+  //AND produtos.statusProd = 1 AND cesta.itensCesta = chave.item_key;
+
+  //SELECT * FROM tb_cestas AS cesta WHERE cesta.idCesta = ?;
+  getCestaPorId(id) {
+    return new Promise((resolve, reject) => {
+      conn.query(`SELECT * FROM tb_cestas AS cesta WHERE cesta.idCesta = ?;
+      `, [
         id
       ], (err, results) => {
         if (err) {

@@ -10,6 +10,7 @@ var lojas = require('./../inc/lojas');
 var frete = require('../inc/fretes.js');
 var produtos = require('../inc/produtos.js');
 var cestas = require('../inc/cestas.js');
+var emails = require('../inc/inscricao.js');
 var router = express.Router();
 
 //------------LOGIN----------------------------
@@ -447,6 +448,14 @@ router.get('/cestas', function (req, res, next) {
   });
 });
 
+router.get('/cestas/:id', function (req, res, next) {
+  cestas.getCestaPorId(req.params.idProd);
+  res.render('/cestas', admin.getParams(req, {
+    navbar: true,
+    cestas
+  }));
+});
+
 //Salvar ou editar uma cesta
 router.post('/cestas', function (req, res, next) {
 
@@ -517,6 +526,19 @@ router.post('/cestas/:id', function (req, res, next) {
 //------------------CESTAS -----------------
 
 
+//------------------EMAILS -----------------
+router.get('/inscricao', function (req, res, next) {
+  emails.getEmails().then(emails => {
+    res.render('admin/inscricao', admin.getParams(req, {
+      navbar: true,
+      emails,
+      pagina: 'Emails',
+      btnLabel: 'Novo Email'
+    }));
+  });
+});
+
+//-------------------EMAILS-----------------------
 
 
 router.get('/emails', function (req, res, next) {

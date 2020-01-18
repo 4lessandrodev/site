@@ -27,4 +27,19 @@ class Utils {
   static uploadImg() {
     document.querySelector("input[type='file']").click();
   }
+
+  static getItemById(el, id = null) {
+    // el.getItemById(id);
+    let code = el.querySelector('.item-id').value;
+    async function get() {
+      location.href = `/cestas/${code}`;
+      let promise = await fetch(`/cestas/${code}`);
+      if (!promise.ok) {
+        throw new Error('Erro');
+      }
+    }
+    get();
+  }
+
+
 }

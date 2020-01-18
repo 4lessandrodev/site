@@ -596,6 +596,10 @@ figure {
   height: 600px;
 }
 
+.gtco-cover.gtco-cover-lite {
+  height: 300px;
+}
+
 @media screen and (max-width: 768px) {
   .gtco-cover.gtco-cover-sm {
     height: 400px;

@@ -10,7 +10,6 @@ var formidable = require('formidable');
 var path = require('path');
 var client = redis.createClient();
 
-
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
 
@@ -164,6 +163,59 @@ app.use(function (req, res, next) {
 //-------------------METODO POST PARA FRETES----------------------------------------
 
 
+//-------------------METODO POST PARA INSCRICAO----------------------------------------
+app.use(function (req, res, next) {
+  if (req.url == '/' && req.method.toLowerCase() === 'post' || req.url == '/cestas' && req.method.toLowerCase() === 'post') {
+    var form = formidable.IncomingForm({
+
+    });
+    form.parse(req, function (err, fields, files) {
+      req.body = fields;
+      req.fields = fields;
+      req.files = files;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+//-------------------METODO POST PARA INSCRICAO----------------------------------------
+
+//-------------------METODO POST PARA CONTATO----------------------------------------
+app.use(function (req, res, next) {
+  if (req.url == '/contact' && req.method.toLowerCase() === 'post') {
+    var form = formidable.IncomingForm({
+
+    });
+    form.parse(req, function (err, fields, files) {
+      req.body = fields;
+      req.fields = fields;
+      req.files = files;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+//-------------------METODO POST PARA CONTATO----------------------------------------
+
+//-------------------METODO POST PARA PERSONALIZAR CESTA-----------------------------
+app.use(function (req, res, next) {
+  if (req.url == '/personalizar' && req.method.toLowerCase() === 'post') {
+    var form = formidable.IncomingForm({
+
+    });
+    form.parse(req, function (err, fields, files) {
+      req.body = fields;
+      req.fields = fields;
+      req.files = files;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+//-------------------METODO POST PARA CONTATO----------------------------------------
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -185,6 +237,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/admin', adminRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

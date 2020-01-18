@@ -111,6 +111,23 @@ VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         }
       });
     });
+  },
+
+  getProdutosDeCesta(idCesta) {
+    return new Promise((resolve, reject) => {
+      conn.query(`SELECT * FROM tb_cestas AS cesta INNER JOIN tb_itens_para_key as chave 
+  INNER JOIN tb_produtos AS produtos WHERE cesta.idCesta = ? AND produtos.enabledProd = 1 
+  AND produtos.statusProd = 1 AND cesta.itensCesta = chave.item_key;
+      `, [
+        0, id
+      ], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
   }
 
 };

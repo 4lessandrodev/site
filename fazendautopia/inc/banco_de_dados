@@ -342,6 +342,20 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `fazendautopia`.`tb_inscriptions`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fazendautopia`.`tb_inscriptions` ;
+
+CREATE TABLE IF NOT EXISTS `fazendautopia`.`tb_inscriptions` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `emailNewsletter` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 6
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `fazendautopia`.`tb_produtos`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `fazendautopia`.`tb_produtos` ;
