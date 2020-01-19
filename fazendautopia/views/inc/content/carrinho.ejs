@@ -1,3 +1,17 @@
+<script>
+  let itens = localStorage.getItem('itensDoCarrinho');
+  cestas = [];
+  produtos = [];
+  itens = JSON.parse(itens);
+  for (let item of itens) {
+    cestas.push(item._mainDescription);
+    // console.log(item._mainDescription);
+    for (let prods of item._itensDescription) {
+      //console.log(prods);
+      produtos.push(prods);
+    }
+  }
+</script>
 <div class="gtco-section">
   <div class="gtco-container">
     <div class="row">
@@ -55,20 +69,12 @@
                 </li>
                 <% }); %>
 
-
-                <li class="list-group-item" style="margin:1em 0; padding: 0.5em;">
-                  <span style="padding: 0 1em;"></span>
-                  <strong>Adicionar novo item</strong>
-                  <span style="float: right; color: darkgreen;">
-                    <i class="far fa-plus-square"></i>
-                  </span>
-                </li>
               </ul>
             </div>
             <button type="submit" class="btn btn-default btn-block">
               <span style="float: left; font-size: 1.2em;">
               </span>
-              Colocar no Carrinho
+              Finalizar Compra
             </button>
           </div>
         </div>

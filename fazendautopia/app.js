@@ -217,6 +217,43 @@ app.use(function (req, res, next) {
 });
 //-------------------METODO POST PARA CONTATO----------------------------------------
 
+
+//-------------------METODO POST PARA CADASTRO DE USUARIO----------------------------
+app.use(function (req, res, next) {
+  if (req.url == '/register' && req.method.toLowerCase() === 'post') {
+    var form = formidable.IncomingForm({
+
+    });
+    form.parse(req, function (err, fields, files) {
+      req.body = fields;
+      req.fields = fields;
+      req.files = files;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+//-------------------METODO POST PARA CADASTRO DE USUARIO----------------------------
+
+//-------------------METODO POST PARA SALVAR PEDIDO----------------------------
+app.use(function (req, res, next) {
+  if (req.url == '/carrinho' && req.method.toLowerCase() === 'post') {
+    var form = formidable.IncomingForm({
+
+    });
+    form.parse(req, function (err, fields, files) {
+      req.body = fields;
+      req.fields = fields;
+      req.files = files;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+//-------------------METODO POST PARA SALVAR PEDIDO----------------------------
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

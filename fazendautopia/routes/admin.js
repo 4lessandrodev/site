@@ -11,6 +11,7 @@ var frete = require('../inc/fretes.js');
 var produtos = require('../inc/produtos.js');
 var cestas = require('../inc/cestas.js');
 var emails = require('../inc/inscricao.js');
+var clientUser = require('./../inc/clientUser');
 var router = express.Router();
 
 //------------LOGIN----------------------------
@@ -28,15 +29,16 @@ router.get('/logout', function (req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-
-  admin.dashboard().then(data => {
-    res.render('admin/index', admin.getParams(req, {
-      data,
-      navbar: false
-    }));
-  }).catch(err => {
-    console.log(err);
-  });
+  if (req.session.user.enabled == 1) {
+    admin.dashboard().then(data => {
+      res.render('admin/index', admin.getParams(req, {
+        data,
+        navbar: false
+      }));
+    }).catch(err => {
+      console.log(err);
+    });
+  }
 });
 
 router.post('/login', function (req, res, next) {
@@ -46,10 +48,10 @@ router.post('/login', function (req, res, next) {
     users.render(req, res, 'Informe sua senha');
   } else {
     users.login(req.body.email, req.body.password).then(user => {
-
       req.session.user = user;
-      res.redirect('/admin');
-
+      if (req.session.user.enabled == 1) {
+        res.redirect('/admin');
+      }
     }).catch(err => {
       users.render(req, res, err.message || err);
     });
@@ -539,6 +541,8 @@ router.get('/inscricao', function (req, res, next) {
 });
 
 //-------------------EMAILS-----------------------
+
+
 
 
 router.get('/emails', function (req, res, next) {

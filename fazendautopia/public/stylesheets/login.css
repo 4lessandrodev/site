@@ -13,9 +13,10 @@
 }
 
 .login {
-  width: 400px;
-  margin: 16px auto;
+  width: 40%;
+  margin: 1% auto;
   font-size: 16px;
+  min-width: 340px;
 }
 
 /* Reset top and bottom margins from certain elements */
@@ -67,7 +68,10 @@
 }
 
 .login input[type="email"],
-.login input[type="password"] {
+.login input[type="password"],
+.login input[type="tel"],
+.login input[type="number"],
+.login input[type="text"] {
   background: var(--cor-seis);
   border-color: var(--cor-quatro);
   color: #555;
@@ -79,18 +83,25 @@
   border-color: var(--cor-um);
 }
 
-.login input[type="submit"] {
+.login input[type="submit"],
+.login input[type="button"] {
   background: var(--cor-um);
   border-color: transparent;
   color: #fff;
   cursor: pointer;
 }
 
-.login input[type="submit"]:hover {
+.login input[type="submit"]:hover,
+.login input[type="button"]:hover {
   background: var(--cor-dois);
 }
 
 /* Buttons' focus effect */
-.login input[type="submit"]:focus {
+.login input[type="submit"]:focus,
+.login input[type="button"]:focus {
   border-color: var(--cor-um);
+}
+
+.hidden {
+  display: none;
 }

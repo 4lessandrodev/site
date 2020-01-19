@@ -119,7 +119,7 @@ VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   INNER JOIN tb_produtos AS produtos WHERE cesta.idCesta = ? AND produtos.enabledProd = 1 
   AND produtos.statusProd = 1 AND cesta.itensCesta = chave.item_key;
       `, [
-        0, id
+        idCesta
       ], (err, results) => {
         if (err) {
           reject(err);
