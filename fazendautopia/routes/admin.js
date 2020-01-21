@@ -12,6 +12,7 @@ var produtos = require('../inc/produtos.js');
 var cestas = require('../inc/cestas.js');
 var emails = require('../inc/inscricao.js');
 var clientUser = require('./../inc/clientUser');
+var pedidosProvisorio = require('./../inc/pedidosProvisorio');
 var router = express.Router();
 
 //------------LOGIN----------------------------
@@ -541,6 +542,43 @@ router.get('/inscricao', function (req, res, next) {
 });
 
 //-------------------EMAILS-----------------------
+
+
+
+//---------------------PEDIDO PROVISORIO----------------
+
+
+router.get('/pedidos-provisorio', function (req, res, next) {
+  pedidosProvisorio.getPedidos().then(pedidos => {
+    res.render('admin/pedidos-provisorio', {
+      navbar: true,
+      pedidos,
+      pagina: 'Pedidos',
+      btnLabel: 'Novo Pedido'
+    });
+  });
+});
+
+
+router.post('/pedidos-provisorio', function (req, res, next) {
+  pedidosProvisorio.save(req.fields).then(retorno => {
+    res.send(retorno);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+
+router.delete('/pedidos-provisorio/:id', function (req, res, next) {
+  pedidosProvisorio.delete(req.params.id).then(retorno => {
+    res.send(retorno);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+//--------------------FIM DO PEDIDO PROVISORIO----------
+
 
 
 

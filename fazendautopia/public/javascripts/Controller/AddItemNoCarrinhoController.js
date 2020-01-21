@@ -28,6 +28,9 @@ function addToCart() {
       case 'arrayItensCode':
         arrayItensCode.push(_input.value);
         break;
+      case 'mainImage':
+        item.image = _input.value;
+        break;
       default:
         break;
     }
@@ -60,8 +63,12 @@ function obterItensDoCarrinho() {
 
 
 function adicionarItemEmLocalStorage(item) {
-  let itens = obterItensDoCarrinho();
+  //AQUI ADICIONAVA O ITEM EM UM ARRAY - MAS DEU PROBLEMA AO SALVAR
+  //let itens = obterItensDoCarrinho();
+  //itens.push(item);
+  let itens = [];
   itens.push(item);
+
   localStorage.setItem('itensDoCarrinho', JSON.stringify(itens));
   //atualizarQtdItensNoCarrinho();
   location.href = '/';

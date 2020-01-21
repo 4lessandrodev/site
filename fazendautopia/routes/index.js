@@ -5,6 +5,7 @@ var inscricao = require('./../inc/inscricao');
 var contact = require('./../inc/contact');
 var clientUser = require('./../inc/clientUser');
 var regiao = require('./../inc/regioes');
+var pedidosProvisorio = require('./../inc/pedidosProvisorio');
 var router = express.Router();
 
 
@@ -44,11 +45,9 @@ router.get('/cestas', function (req, res, next) {
 //-----------------CAPTURAR CESTA CLICADA------------
 
 router.get('/cestas/:id', function (req, res, next) {
-  console.log(req.params.id);
   cestas.getCestaPorId(req.params.id).then(retorno => {
     let cesta = retorno[0];
     cestas.getProdutosDeUmaCestaEspecifica(cesta.itensCesta).then(produtos => {
-      console.log(produtos[0]);
       res.render('personalizar', {
         title: 'Personalizar',
         home: true,
@@ -66,11 +65,9 @@ router.get('/cestas/:id', function (req, res, next) {
 });
 
 router.post('/cestas/:id', function (req, res, next) {
-  console.log(req.params.id);
   cestas.getCestaPorId(req.params.id).then(retorno => {
     let cesta = retorno[0];
     cestas.getProdutosDeUmaCestaEspecifica(cesta.itensCesta).then(produtos => {
-      console.log(produtos[0]);
       res.render('personalizar', {
         title: 'Personalizar',
         home: true,
@@ -173,12 +170,17 @@ router.post('/register', function (req, res, next) {
 
 
 router.get('/carrinho', function (req, res, next) {
-  regiao.getRegioes().then(regioes => {
-    res.render('carrinho', {
-      title: 'Carrinho',
-      home: true,
-      cesta: [],
-      produtos: []
+  if (!req.session.user) { res.redirect('/login'); return false; }
+  let logedUser = req.session.user;
+  clientUser.getClientByUserId(logedUser.id).then(clientLoged => {
+    regiao.getRegioes().then(regioes => {
+      res.render('carrinho', {
+        title: 'Carrinho',
+        home: true,
+        cesta: [],
+        produtos: [],
+        clientLoged: clientLoged[0]
+      });
     });
   });
 });
@@ -196,7 +198,18 @@ router.post('/personalizar', function (req, res, next) {
 });
 //------------------------------------------------------
 
+//---------------------PEDIDO PROVISORIO----------------
 
+
+router.post('/pedido-provisorio', function (req, res, next) {
+  pedidosProvisorio.save(req.fields).then(retorno => {
+    console.log(req.fields);
+  }).catch(err => {
+    res.send(err);
+  });
+});
+
+//--------------------FIM DO PEDIDO PROVISORIO----------
 
 //------------------------------------------------------
 router.use(function (req, res, next) {

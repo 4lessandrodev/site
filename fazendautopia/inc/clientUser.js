@@ -87,6 +87,23 @@ module.exports = {
         }
       });
     });
+  },
+
+  getClientByUserId(userId) {
+    console.log('ENTROU NA FUNCAO: ' + userId);
+    return new Promise((resolve, reject) => {
+      conn.query(`SELECT * FROM tb_cliente AS clientLoged WHERE clientLoged.userId = ?`, [
+        userId
+      ], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
   }
+
+
 
 };

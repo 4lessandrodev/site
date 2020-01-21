@@ -1,10 +1,11 @@
 export class CarrinhoModel {
-  constructor (mainCode, mainDescription, arrayItensCode, priceTotal, itensDescription) {
+  constructor (mainCode, mainDescription, arrayItensCode, priceTotal, itensDescription, image) {
     this._mainCode = mainCode;
     this._mainDescription = mainDescription;
     this._arrayItensCode = arrayItensCode;
     this._priceTotal = priceTotal;
     this._itensDescription = itensDescription;
+    this._mainImage = image;
   }
 
   get mainCode() {
@@ -45,5 +46,13 @@ export class CarrinhoModel {
 
   set itensDescription(value) {
     this._itensDescription = value;
+  }
+
+  get image() {
+    return this._mainImage;
+  }
+
+  set image(value) {
+    this._mainImage = value;
   }
 }
